@@ -44,7 +44,7 @@ exports.options = {
   targets: {
     '/index': {
       // this is option of http-proxy-middleware
-      target: 'http://localhost:3002', // target host
+      target: 'http://localhost:3001', // target host
       changeOrigin: true // needed for virtual hosted sites
     }
   }
