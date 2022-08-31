@@ -24,6 +24,8 @@ exports.binaryType = 'binary';
 /**
  * 返回文字
  */
+exports.sigErrText = '登录失败';
+exports.sigEssText = '登录成功';
 exports.addErrText = '添加失败';
 exports.addEssText = '添加成功';
 exports.modErrText = '修改失败';
@@ -31,11 +33,23 @@ exports.modEssText = '修改成功';
 exports.obtErrText = '获取失败';
 exports.obtEssText = '获取成功';
 exports.parErrText = '参数错误';
+exports.verErrText = '验证码错误';
 
 /**
  * 服务器端口号
  */
-exports.PORT = 3000;
+exports.PORT = 9999;
+
+/**
+ * token
+ */
+// exports.secret = 'qwertyuiopASDFGHJKLzxcvbnm';
+exports.secret = 'secret';
+
+/**
+ * 验证码
+ */
+exports.verification = '';
 
 /**
  * 代理

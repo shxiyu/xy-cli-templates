@@ -17,5 +17,9 @@ const requireDirectory = require('require-directory'); // 动态路由
 const proxy = require('koa2-proxy-middleware'); // 代理
 const mysql = require('mysql'); // 数据库
 const log4js = require('koa-log4'); // 输出日志文件
+const multer = require('koa-multer'); //加载koa-multer模块
+const jwt = require('jsonwebtoken'); // token
+const koa_jwt = require('koa-jwt'); // 验证传过来的token
+const captcha = require('svg-captcha'); // 验证码模块
 
-module.exports = {app, router, Router, fs, path, jsonplus, json, cors, onerror, bodyparser, logger, requireDirectory, proxy, mysql, log4js};
+module.exports = {app, router, Router, fs, path, jsonplus, json, cors, onerror, bodyparser, logger, requireDirectory, proxy, mysql, log4js, multer, jwt, koa_jwt, captcha};

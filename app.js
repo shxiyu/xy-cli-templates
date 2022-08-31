@@ -1,12 +1,27 @@
 const {app, json, cors, onerror, bodyparser, logger, proxy} = require('./src/appConfig');
 const consts = require('./src/const');
 const {accessLogger} = require('./logger/logger');
+const token = require('./classList/token');
 const InitDircetory = require('./classList/directory');
 
 // error 错误处理
 onerror(app);
 
 app
+  // 当token验证异常时候的处理，如token过期、token错误
+  // .use((ctx, next) => {
+  //   return next().catch(err => {
+  //     if (err.status === 401) {
+  //       ctx.status = 401;
+  //       ctx.body = {
+  //         code: ctx.status,
+  //         message: err.message == 'Authentication Error' ? 'token失效, 请重新登录!' : err
+  //       };
+  //     } else {
+  //       throw err;
+  //     }
+  //   });
+  // })
   // 访问日志--记录用户所有访问请求
   .use(accessLogger())
   // 跨域
@@ -18,11 +33,27 @@ app
     })
   )
   // 使用koa-bodyparser中间件
-  .use(bodyparser({enableTypes: ['json', 'form', 'text']}))
+  .use(
+    bodyparser({
+      enableTypes: ['json', 'form', 'text'],
+      multipart: true, // 开启文件上传
+      formidable: {
+        maxFileSize: 500 * 1024 * 1024, // 设置上传文件大小最大限制，默认5M
+        keepExtensions: true // 保留文件拓展名
+      }
+    })
+  )
   // 代理, 根据实际添加
   .use(proxy(consts.options))
   .use(json())
   .use(logger())
+  // 路由权限控制
+  // .use(
+  //   koa_jwt({secret: consts.secret}).unless({
+  //     // 设置接口可以不需要认证访问
+  //     path: [/^\/login/, /^\/code/]
+  //   })
+  // )
   // 静态资源目录
   .use(require('koa-static')(__dirname + '/public'))
   // logger

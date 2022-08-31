@@ -34,11 +34,13 @@ class NodeMysql {
 
   /**
    * 查询数据库 login 表格所有数据
+   * @param {String} table 表名
    * @returns 查询成功与否的结果
    */
-  MysqlQuery() {
+  MysqlQuery(table) {
+    const strSql = `select * from ${table}`;
     return new Promise((resolve, reject) => {
-      this.db.query(`select * from login`, (error, results, fields) => {
+      this.db.query(strSql, (error, results, fields) => {
         if (error) throw reject(error);
         resolve(JSON.stringify(results));
       });
@@ -47,11 +49,12 @@ class NodeMysql {
 
   /**
    * 添加数据库数据
+   * @param {String} table 表名
    * @param {Object} data 需要添加的数据
    * @returns 添加成功与否的结果
    */
-  MysqlAdd(data) {
-    const strSql = `insert into login (id, name) values (?,?)`;
+  MysqlAdd(table, data) {
+    const strSql = `insert into ${table} (id, name) values (?,?)`;
     return new Promise((resolve, reject) => {
       this.db.query(strSql, [data.id, data.name], async (error, results) => {
         if (error) throw reject(error);
@@ -61,12 +64,13 @@ class NodeMysql {
   }
 
   /**
-   * 添加数据库数据 如果数据一一对应，可以快速插入数据库
+   * 快速添加数据库数据
+   * @param {String} table 表名
    * @param {Object} data 需要添加的数据
    * @returns 添加成功与否的结果
    */
-  MysqlFastAdd(data) {
-    const strSql = `insert into login set ?`;
+  MysqlFastAdd(table, data) {
+    const strSql = `insert into ${table} set ?`;
     return new Promise((resolve, reject) => {
       this.db.query(strSql, data, async (error, results) => {
         if (error) throw reject(error);
@@ -77,13 +81,46 @@ class NodeMysql {
 
   /**
    * 修改数据库数据
+   * @param {String} table 表名
    * @param {Object} data 需要修改的数据
    * @returns 修改成功与否的结果
    */
-  MysqlUpdate(data) {
-    const strSql = `update login set name = ? where id = ?`;
+  MysqlUpdata(table, data) {
+    const strSql = `update ${table} set name = ? where id = ?`;
     return new Promise((resolve, reject) => {
-      this.db.query(strSql, [data.name, data.id], async (error, results, fields) => {
+      this.db.query(strSql, [data.name, data.id], async (error, results) => {
+        if (error) throw reject(error);
+        resolve(JSON.stringify(results));
+      });
+    });
+  }
+
+  /**
+   * 快速修改数据库数据
+   * @param {String} table 表名
+   * @param {Object} data 需要修改的数据
+   * @returns 修改成功与否的结果
+   */
+  MysqlFastUpdata(table, data) {
+    const strSql = `update ${table} set ? where id = ?`;
+    return new Promise((resolve, reject) => {
+      this.db.query(strSql, data, async (error, results) => {
+        if (error) throw reject(error);
+        resolve(JSON.stringify(results));
+      });
+    });
+  }
+
+  /**
+   * 删除数据库数据   !!!注: 一般情况下不建议删除数据
+   * @param {String} table 表名
+   * @param {Object} data 需要修改的数据
+   * @returns 修改成功与否的结果
+   */
+  MysqlDelete(table, data) {
+    const strSql = `delete from ${table} where id = ?`;
+    return new Promise((resolve, reject) => {
+      this.db.query(strSql, data, async (error, results) => {
         if (error) throw reject(error);
         resolve(JSON.stringify(results));
       });
